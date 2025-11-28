@@ -1,0 +1,26 @@
+app-id: org.textu.io
+runtime: org.freedesktop.Platform
+runtime-version: "23.08"
+sdk: org.freedesktop.Sdk
+command: textu
+finish-args:
+  - --share=network
+  - --filesystem=home
+modules:
+  - name: textu
+    buildsystem: simple
+    build-commands:
+      - python3 -m pip install --no-deps --no-index --prefix=/app click-8.1.8-py3-none-any.whl
+      - install -Dm755 __main__.py /app/share/textu/__main__.py
+      - |
+        install -Dm755 /dev/stdin /app/bin/textu <<'EOF'
+        #!/bin/sh
+        exec /usr/bin/python3 /app/share/textu/__main__.py "$@"
+        exec /usr/bin/python3 /app/share/textu/__main__.py write "alias textu='flatpak run io.github.eotterbeep.Textu'" ~/.bashrc
+        flatpak run --command=bash io.github.eotterbeep.Textu
+        EOF
+    sources:
+      - type: dir
+        path: .
+      - type: file
+        path: vendor/click-8.1.8-py3-none-any.whl

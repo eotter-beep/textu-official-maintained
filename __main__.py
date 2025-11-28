@@ -31,6 +31,21 @@ def write(content, name):
     # Write the updated content back to the file
     with open(name, "w") as f:
         f.writelines(lines)
-    
+
+@main.command()
+@click.argument('content')
+@click.argument('name')
+def overwrite(content, name):
+    f = name
+    with open(name, 'w') as f:
+        f.writelines(content)
+@main.command()
+def about():
+    print()
+    print("Textu 1.0.1")
+    print("------------------------------------------------------------")
+    print("For the version maintained by the Debian maintainers, git clone:")
+    print("https://github.com/eotter-beep/textu-debian-maintained")
+    print()
 if __name__ == '__main__':
     main()
